@@ -21,7 +21,7 @@ public class CourseDaoImpl implements CourseDao {
     @Override
     public Course createNewCourse(Course course) {
         //YOUR CODE STARTS HERE
-        String sql = "INSERT INTO course (courseName, courseDesc, teacherId) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO course (courseCode, courseDesc, teacherId) VALUES (?, ?, ?)";
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
@@ -32,8 +32,7 @@ public class CourseDaoImpl implements CourseDao {
             return ps;
         }, keyHolder);
 
-        int newId = keyHolder.getKey().intValue();
-        course.setCourseId(newId);
+        course.setCourseId(keyHolder.getKey().intValue());
         return course;
 
         //YOUR CODE ENDS HERE
@@ -61,7 +60,7 @@ public class CourseDaoImpl implements CourseDao {
     public void updateCourse(Course course) {
         //YOUR CODE STARTS HERE
 
-        String sql = "UPDATE course SET courseName = ?, courseDesc = ?, teacherId = ? WHERE cid = ?";
+        String sql = "UPDATE course SET courseCode = ?, courseDesc = ?, teacherId = ? WHERE cid = ?";
         jdbcTemplate.update(sql, course.getCourseName(), course.getCourseDesc(), course.getTeacherId(), course.getCourseId());
 
         //YOUR CODE ENDS HERE
