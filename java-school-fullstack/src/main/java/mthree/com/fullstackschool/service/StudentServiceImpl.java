@@ -1,6 +1,7 @@
 package mthree.com.fullstackschool.service;
 
 import mthree.com.fullstackschool.dao.StudentDao;
+import mthree.com.fullstackschool.model.Course;
 import mthree.com.fullstackschool.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -12,6 +13,7 @@ public class StudentServiceImpl implements StudentServiceInterface {
 
     //YOUR CODE STARTS HERE
     private final StudentDao studentDao;
+    CourseServiceImpl courseService;
 
 
     @Autowired
@@ -84,9 +86,13 @@ public class StudentServiceImpl implements StudentServiceInterface {
         //YOUR CODE STARTS HERE
 
         Student student = studentDao.findStudentById(studentId);
+        Course course = courseService.getCourseById(courseId);
+
         if ("Student Not Found".equals(student.getStudentFirstName())) {
             System.out.println("Student not found");
             return;
+        }else if(course.getCourseName().equals("Course Not Found")) {
+            System.out.println("Course not found");
         }
         studentDao.deleteStudentFromCourse(studentId, courseId);
         System.out.println("Student: " + studentId + " deleted from course: " + courseId);
@@ -97,10 +103,15 @@ public class StudentServiceImpl implements StudentServiceInterface {
     public void addStudentToCourse(int studentId, int courseId) {
         //YOUR CODE STARTS HERE
         Student student = studentDao.findStudentById(studentId);
+        Course course = courseService.getCourseById(courseId);
         if ("Student Not Found".equals(student.getStudentFirstName())) {
             System.out.println("Student not found");
             return;
+        } else if (course.getCourseName().equals("Course not found")) {
+            System.out.println("Course not found");
+            return;
         }
+
         try {
             studentDao.addStudentToCourse(studentId, courseId);
             System.out.println("Student: " + studentId + " added to course: " + courseId);
